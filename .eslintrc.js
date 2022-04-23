@@ -29,6 +29,8 @@ module.exports = {
         // 解决let被强转为const问题
         'prefer-const': 0,
         // 保存代码时缩进4个空格
-        indent: ['error', 4]
+        indent: ['error', 4],
+        //要求或禁止末尾逗号
+        'comma-dangle':[2,'never']
     }
 }
