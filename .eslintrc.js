@@ -30,7 +30,8 @@ module.exports = {
         'prefer-const': 0,
         // 保存代码时缩进4个空格
         indent: ['error', 4],
-        //要求或禁止末尾逗号
-        'comma-dangle':[2,'never']
+        // 要求或禁止末尾逗号
+        'comma-dangle': [2, 'never'],
+        '@typescript-eslint/no-var-requires': 0
     }
 }

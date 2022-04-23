@@ -1,21 +1,61 @@
 <template>
-  <div />
-  <div />
+  <div class="row">
+    <div
+      v-for="column in list"
+      :key="column.id"
+      class="col-4 mb-4"
+    >
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <img
+            :src="column.avatar"
+            :alt="column.title"
+            class="rounded-circle border border-light w-25 my-3"
+          >
+          <p class="card-text text-left">
+            {{ column.description }}
+          </p>
+          <a
+            href="#"
+            class="btn btn-outline-primary"
+          >进入专栏</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default {
-    components: {
-    },
-    data () {
-        return {
-        }
-    }
+<script lang='ts'>
+import { computed } from '@vue/reactivity'
+import { defineComponent, PropType } from 'vue'
+export interface ColumnProps {
+    id:number;
+    title:string;
+    avatar?:string;
+    description:string;
 }
 
+export default defineComponent({
+    name: 'ColumnList',
+    props: {
+        list: {
+            // 把一个构造函数断言成类型需要PropType
+            type: Array as PropType<ColumnProps[]>,
+            required: true
+        }
+    },
+    setup (props) {
+        const columnList = computed(() => {
+            return props.list.map(column => {
+                if (!column.avatar) {
+                    column.avatar = require('@/assets/column.jpg')
+                }
+                return column
+            })
+        })
+    }
+})
+
 </script>
-
 <style lang='scss' scoped>
-
 </style>
