@@ -32,6 +32,7 @@ module.exports = {
         indent: ['error', 4],
         // 要求或禁止末尾逗号
         'comma-dangle': [2, 'never'],
-        '@typescript-eslint/no-var-requires': 0
+        '@typescript-eslint/no-var-requires': 0,
+        'vue/multi-word-component-names': 0
     }
 }

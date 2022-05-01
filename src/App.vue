@@ -1,5 +1,6 @@
 <template>
-  <div id="container">
+  <div class="container">
+    <global-header :user="currentUser" />
     <column-list
       :list="list"
     />
@@ -10,6 +11,13 @@
 import { defineComponent } from 'vue'
 // 报错原因：typescript 只能理解 .ts 文件，无法理解 .vue文件
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
+import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
+
+const currentUser:UserProps = {
+    isLogin: true,
+    name: '小蔡'
+}
+
 const testData:ColumnProps[] = [
     {
         id: 1,
@@ -28,23 +36,21 @@ const testData:ColumnProps[] = [
 export default defineComponent({
     name: 'App',
     components: {
-        ColumnList
+        ColumnList,
+        GlobalHeader
     },
     setup () {
         return {
-            list: testData
+            list: testData,
+            currentUser
         }
     }
 })
 </script>
 
 <style>
-        #app {
-        font-family: Avenir, Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 60px;
-        }
+.container{
+    width: 80%;
+    margin: 0 auto;
+}
 </style>
