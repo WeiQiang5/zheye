@@ -5,7 +5,7 @@
       :list="list"
     />
 
-    <form>
+    <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label
           for="exapleInputEmail1"
@@ -17,13 +17,6 @@
           placeholder="请输入邮箱地址"
           type="text"
         />
-        {{ emailVal }}
-        <div
-          v-if="emailRef.error"
-          class="form-text"
-        >
-          {{ emailRef.message }}
-        </div>
       </div>
       <div class="mb-3">
         <label
@@ -37,7 +30,10 @@
           type="password"
         />
       </div>
-    </form>
+      <template #submit>
+        <span class="btn btn-danger">Submit</span>
+      </template>
+    </validate-form>
   </div>
 </template>
 
@@ -47,7 +43,7 @@ import { defineComponent, reactive, ref } from 'vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
 import ValidateInput, { RulesProp } from './components/ValidateInput.vue'
-
+import ValidateForm from './components/ValidateForm.vue'
 const currentUser:UserProps = {
   isLogin: true,
   name: '小蔡'
@@ -73,42 +69,35 @@ export default defineComponent({
   components: {
     ColumnList,
     GlobalHeader,
-    ValidateInput
+    ValidateInput,
+    ValidateForm
   },
   setup () {
+    // 账号和密码
     const emailVal = ref('')
     const passwordVal = ref('')
+    // 验证格式
     const emailRules:RulesProp = [
       { type: 'required', message: '电子邮箱地址不能为空' },
       { type: 'email', message: '请输入正确的电子邮箱' }
     ]
-    const passwordRules = [
+    const passwordRules:RulesProp = [
       { type: 'required', message: '密码不能为空' },
       { type: 'range', min: { message: '你的密码至少包含6位,不能含有空格', length: 6 } }
     ]
-    const emailRef = reactive({
-      val: '',
-      error: false,
-      message: ''
-    })
-    const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-    const validateEmail = () => {
-      if (emailRef.val.trim() === '') {
-        emailRef.error = true
-        emailRef.message = 'can not be empty!'
-      } else if (!emailReg.test(emailRef.val)) {
-        emailRef.error = true
-        emailRef.message = 'should be valid message!'
-      }
+    // 点击事件
+    const onFormSubmit = (result:boolean) => {
+      console.log('result', result)
     }
 
     return {
       emailVal,
       list: testData,
       currentUser,
-      emailRef,
       emailRules,
-      validateEmail
+      passwordVal,
+      passwordRules,
+      onFormSubmit
     }
   }
 })
