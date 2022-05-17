@@ -34,6 +34,11 @@ module.exports = {
     'comma-dangle': [2, 'never'],
     '@typescript-eslint/no-var-requires': 0,
     'vue/multi-word-component-names': 0,
-    'vue/html-self-closing': 0 // 忽略html标签⾃闭合
+    'vue/html-self-closing': 0, // 忽略html标签⾃闭合
+    indent: [
+      'error',
+      { 'SwitchCase': 1 }
+    ]
+
   }
 }

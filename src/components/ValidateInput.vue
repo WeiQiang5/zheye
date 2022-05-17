@@ -17,8 +17,8 @@
 </template>
 
 <script lang='ts'>
-import { emitter, emitter1 } from './ValidateForm.vue'
 import { defineComponent, reactive, PropType, onMounted } from 'vue'
+import useCurrentInstance from '../hooks/useCurrentInstance'
 const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 interface RuleProp {
     type:'required' | 'email' | 'range';
@@ -35,13 +35,23 @@ interface RuleProp {
 export type RulesProp = Array<RuleProp>
 export default defineComponent({
   props: {
-    rules: Array as PropType<RulesProp>,
-    modelValue: String
+    // eslint-disable-next-line vue/require-default-prop
+    rules: {
+      type: Array as PropType<RulesProp>
+    },
+    modelValue: {
+      type: String,
+      default: ''
+    }
   },
   // 不希望根元素继承属性
+  // eslint-disable-next-line vue/order-in-components
   inheritAttrs: false,
   emits: ['update:modelValue'],
   setup (props, context) {
+    // 获取mitt
+    const { globalProperties } = useCurrentInstance()
+    const { $mitt } = globalProperties
     // 定义输入框的值以及报错信息
     const inputRef = reactive({
       val: props.modelValue || '',
@@ -51,36 +61,39 @@ export default defineComponent({
     // blur点击事件
     const validateInput = ():boolean => {
       if (props.rules) {
+        console.log('进来校正');
+        
         const allPassed = props.rules.every(rule => {
           let passed = true
           inputRef.message = rule.message || ''
           // const { val } = inputRef
           // 验证格式
           switch (rule.type) {
-          case 'required':
-            passed = (inputRef.val.trim() !== '')
-            break
-          case 'email':
-            passed = emailReg.test(inputRef.val)
-            break
-          case 'range':{ // 添加花括号是因为此地会报错，新版eslint就算switch 逻辑没有走到 case 1 的代码块，由于作用域提升，会导致case 1 影响到case 2
-            const { min, max } = rule
-            if (min && inputRef.val.trim().length < min.length) {
-              passed = false
-              inputRef.message = min.message
+            case 'required':
+              passed = (inputRef.val.trim() !== '')
+              break
+            case 'email':
+              passed = emailReg.test(inputRef.val)
+              break
+            case 'range':{ // 添加花括号是因为此地会报错，新版eslint就算switch 逻辑没有走到 case 1 的代码块，由于作用域提升，会导致case 1 影响到case 2
+              const { min, max } = rule
+              if (min && inputRef.val.trim().length < min.length) {
+                passed = false
+                inputRef.message = min.message
+              }
+              if (max && inputRef.val.trim().length < max.length) {
+                passed = false
+                inputRef.message = max.message
+              }
+              break
             }
-            if (max && inputRef.val.trim().length < max.length) {
-              passed = false
-              inputRef.message = max.message
-            }
-            break
-          }
-          default:
-            break
+            default:
+              break
           }
           return passed
         })
         inputRef.error = !allPassed
+        console.log('判断结果',allPassed)
         return allPassed
       }
       return true
@@ -89,8 +102,9 @@ export default defineComponent({
       inputRef.val = ''
     }
     onMounted(() => {
-      emitter.emit('form-item-created', validateInput)
-      emitter1.emit('form-item-clear', clearInput)
+      console.log('mitt',$mitt)
+      $mitt.emit('form-item-created', validateInput)
+      $mitt.emit('form-item-clear', clearInput)
     })
     // 手动处理更新和发送事件
     const updateValue = (e:KeyboardEvent) => {
