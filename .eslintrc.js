@@ -31,14 +31,10 @@ module.exports = {
     // 保存代码时缩进2个空格
     indent: ['error', 2],
     // 要求或禁止末尾逗号
-    'comma-dangle': [2, 'never'],
+    // 'comma-dangle': [2, 'never'],
     '@typescript-eslint/no-var-requires': 0,
     'vue/multi-word-component-names': 0,
-    'vue/html-self-closing': 0, // 忽略html标签⾃闭合
-    indent: [
-      'error',
-      { 'SwitchCase': 1 }
-    ]
+    'vue/html-self-closing': 0 // 忽略html标签⾃闭合
 
   }
 }
