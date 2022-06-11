@@ -18,7 +18,7 @@
 
 <script lang='ts'>
 import { defineComponent, reactive, PropType, onMounted } from 'vue'
-import { emitter, emitter1 } from './ValidateForm.vue'
+import { emitter } from './ValidateForm.vue'
 const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 // 校验接口
 interface RuleProp {
@@ -74,13 +74,13 @@ export default defineComponent({
             break
           case 'range':{ // 添加花括号是因为此地会报错，新版eslint就算switch 逻辑没有走到 case 1 的代码块，由于作用域提升，会导致case 1 影响到case 2
             const { min, max } = rule
-            if (min && inputRef.val.trim().length < min.length) {
+            if (min && inputRef.val.trim().length < min) {
               passed = false
-              inputRef.message = min.message
+              inputRef.message = rule.message
             }
-            if (max && inputRef.val.trim().length < max.length) {
+            if (max && inputRef.val.trim().length < max) {
               passed = false
-              inputRef.message = max.message
+              inputRef.message = rule.message
             }
             break
           }
@@ -99,11 +99,8 @@ export default defineComponent({
       console.log('清除值')
       inputRef.val = ''
     }
-    onMounted(() => {
-      console.log(emitter1)
-      emitter.emit('form-item-created', validateInput)
-      emitter1.emit('form-item-clear', clearInput)
-    })
+    emitter.emit('form-item-created', validateInput)
+    emitter.emit('form-item-clear', clearInput)
     // 手动处理更新和发送事件
     const updateValue = (e:KeyboardEvent) => {
       const targetValue = (e.target as HTMLInputElement).value

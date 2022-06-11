@@ -49,12 +49,13 @@ export default defineComponent({
     const emailRules: RulesProp = [
       { type: 'required', message: '电子邮箱地址不能为空' },
       { type: 'email', message: '请输入正确的电子邮箱格式' }
+
     ]
     // 密码验证
     const passwordVal = ref('')
     const passwordRules: RulesProp = [
-      { type: 'required', message: '密码不能为空' }
-
+      { type: 'required', message: '密码不能为空' },
+      { type: 'range', min: 5, message: '请输入不少于5个字数的密码' }
     ]
     // 按钮点击
     const onFormSubmit = (result: boolean) => {

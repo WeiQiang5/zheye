@@ -25,14 +25,11 @@ type ValidateFunc = () => boolean;
 type ClearInputFunc = () => void;
 
 export type Events = {
-  'form-item-created':ValidateFunc
-}
-export type Events1 = {
+  'form-item-created':ValidateFunc,
   'form-item-clear':ClearInputFunc
 }
 
 export const emitter = mitt<Events>()
-export const emitter1 = mitt<Events1>()
 
 export default defineComponent({
   emits: ['form-submit'],
@@ -44,6 +41,7 @@ export default defineComponent({
       // 这里不直接用every是因为一旦一开始就是false，则不会再验证后面的了
       const result = funcArr.map((func) => func()).every((result) => result)
       if (result) {
+        console.log('前面验证通过', clearFuncArr)
         const clearItems = clearFuncArr.map((func) => func())
         //   发送点击事件
         context.emit('form-submit', clearItems)
@@ -60,11 +58,11 @@ export default defineComponent({
     }
     // 监听事件
     emitter.on('form-item-created', callback)
-    emitter1.on('form-item.clear', clearCallBack)
+    emitter.on('form-item-clear', clearCallBack)
     onUnmounted(() => {
       emitter.off('form-item-created', callback)
       funcArr = []
-      emitter1.off('form-item-clear', clearCallBack)
+      emitter.off('form-item-clear', clearCallBack)
       clearFuncArr = []
     })
 
