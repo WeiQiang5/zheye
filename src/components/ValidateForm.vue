@@ -34,6 +34,7 @@ export const emitter = mitt<Events>()
 export default defineComponent({
   emits: ['form-submit'],
   setup (props, context) {
+    // 获取mitt
     let funcArr: ValidateFunc[] = []
     let clearFuncArr: ClearInputFunc[] = []
     // 默认按钮点击事件

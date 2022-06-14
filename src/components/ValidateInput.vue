@@ -2,6 +2,7 @@
 <template>
   <div class="validate-input-container pb-3">
     <input
+      v-if="tag !== 'textarea'"
       :value="inputRef.val"
       class="form-conftrol"
       :class="{'is-invalid':inputRef.error}"
@@ -9,6 +10,16 @@
       @blur="validateInput"
       @input="updateValue"
     >
+    <textarea
+      v-else
+      :value="inputRef.val"
+      class="form-conftrol"
+      :class="{'is-invalid':inputRef.error}"
+      v-bind="$attrs"
+      @blur="validateInput"
+      @input="updateValue"
+    >
+    </textarea>
     <span
       v-if="inputRef.error"
       class="invalid-feedback"
@@ -34,6 +45,7 @@ interface RuleProp {
     };
 }
 export type RulesProp = Array<RuleProp>
+export type TagType = 'input' | 'textarea'
 export default defineComponent({
   props: {
     // eslint-disable-next-line vue/require-default-prop
@@ -43,6 +55,10 @@ export default defineComponent({
     modelValue: {
       type: String,
       default: ''
+    },
+    tag: {
+      type: String as PropType<TagType>,
+      default: 'input'
     }
   },
   // 不希望根元素继承属性
@@ -116,4 +132,7 @@ export default defineComponent({
 })
 </script>
 <style lang='scss' scoped>
+.form-conftrol{
+  width: 100%;
+}
 </style>

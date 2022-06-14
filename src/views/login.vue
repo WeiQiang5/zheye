@@ -63,8 +63,8 @@ export default defineComponent({
       // 验证通过
       if (result) {
         console.log('验证通过')
-        // router.push('/')
-        // store.commit('login')
+        router.push('/')
+        store.commit('login')
       }
     }
 

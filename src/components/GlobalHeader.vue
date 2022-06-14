@@ -34,7 +34,7 @@
         <dropdown :title="`你好 ${user.name}`">
           <dropdown-item>
             <router-link
-              to="#"
+              to="/create"
               class="dropdown-item"
             >
               新建文章
