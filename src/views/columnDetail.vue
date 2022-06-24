@@ -7,9 +7,9 @@
     >
       <div class="col-3 text-center">
         <img
-          :src="column.avatar"
+          :src="column.avatar && column.avatar.url"
           :alt="column.title"
-          class="rounded-circle border "
+          class="rounded-circle border w-100"
         >
       </div>
       <div class="col-9">
@@ -24,9 +24,8 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { testData, testPosts } from '../testData'
 import PostList from '../components/PostList.vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '../store/store'
@@ -39,9 +38,15 @@ export default defineComponent({
     const route = useRoute()
     const store = useStore<GlobalDataProps>()
     // 获取路由的传进来的id
-    const currentId = +route.params.id
+    const currentId = route.params.id
     const column = computed(() => store.getters.getColumnById(currentId))
     const list = computed(() => store.getters.getPostsBycid(currentId))
+
+    console.log(column)
+    onMounted(() => {
+      store.dispatch('fetchColumn', currentId)
+      store.dispatch('fetchPosts', currentId)
+    })
 
     return {
       route,

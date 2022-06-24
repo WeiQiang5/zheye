@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <global-header :user="currentUser" />
+    <loading v-if="isLoading"></loading>
     <router-view></router-view>
     <footer class="text-center py-4 text-secondary bg-light mt-6">
       <small>
@@ -21,17 +22,20 @@ import { defineComponent, computed } from 'vue'
 import { useStore } from 'vuex'
 // 报错原因：typescript 只能理解 .ts 文件，无法理解 .vue文件
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
-
+import loading from './components/Loader.vue'
 export default defineComponent({
   name: 'App',
   components: {
-    GlobalHeader
+    GlobalHeader,
+    loading
   },
   setup () {
     const store = useStore()
     const currentUser = computed(() => store.state.user)
+    const isLoading = computed(() => store.state.loading)
     return {
-      currentUser
+      currentUser,
+      isLoading
     }
   }
 })

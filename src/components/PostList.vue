@@ -2,7 +2,7 @@
   <div class="post-list">
     <article
       v-for="post in list"
-      :key="post.id"
+      :key="post._id"
       class="card mb-3 shadow-sm"
     >
       <div class="card-body">
@@ -14,14 +14,14 @@
             class="col-3"
           >
             <img
-              :src="post.image"
+              :src="post.image && post.image.url"
               :alt="post.title"
               class="rounded-lg w-100"
             >
           </div>
 
           <p :class="{'col-9': post.image}">
-            {{ post.content }}
+            {{ post.excerpt }}
           </p>
         </div>
 
@@ -35,7 +35,7 @@
 
 import { defineComponent, PropType } from 'vue'
 
-import { PostProps } from '../testData'
+import { PostProps } from '../store'
 
 export default defineComponent({
 
@@ -54,3 +54,10 @@ export default defineComponent({
 })
 
 </script>
+
+<style lang="scss" scoped>
+.img{
+  width: 50px;
+  height: 50px;
+}
+</style>
