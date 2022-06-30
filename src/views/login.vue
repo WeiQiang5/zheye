@@ -63,8 +63,14 @@ export default defineComponent({
       // 验证通过
       if (result) {
         console.log('验证通过')
-        router.push('/')
-        store.commit('login')
+        const payload = {
+          email: emailVal.value,
+          password: passwordVal.value
+        }
+        store.dispatch('login', payload).then(res => {
+          console.log(res)
+          router.push('/')
+        })
       }
     }
 
