@@ -36,8 +36,12 @@ axios.interceptors.response.use(function (response) {
   }, 1000)
 
   return response.data
-}, function (error) {
+}, function (err) {
+  console.log('捕捉错误', err.response)
   // 对响应错误做点什么
+  const { error } = err.response.data
+  store.commit('setError', { status: true, message: error })
+  store.commit('setLoading', false)
   return Promise.reject(error)
 })
 // 挂载到全局
