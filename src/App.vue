@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <global-header :user="currentUser" />
-    <h1>{{error}}</h1>
+    <message
+      v-if="error.status"
+      type="error"
+      :message="error.message"
+    ></message>
     <loading v-if="isLoading"></loading>
     <router-view></router-view>
     <footer class="text-center py-4 text-secondary bg-light mt-6">
@@ -25,12 +29,14 @@ import { useStore } from 'vuex'
 import GlobalHeader from './components/GlobalHeader.vue'
 import loading from './components/Loader.vue'
 import { GlobalDataProps } from './store/store'
+import message from '@/components/Message.vue'
 import axios from 'axios'
 export default defineComponent({
   name: 'App',
   components: {
     GlobalHeader,
-    loading
+    loading,
+    message
   },
   setup () {
     const store = useStore<GlobalDataProps>()

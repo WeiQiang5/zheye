@@ -79,11 +79,10 @@ const store = createStore<GlobalDataProps>({
     setLoading (state, status) {
       state.loading = status
     },
-    fetchCurrentUser(state, rawData) {
+    fetchCurrentUser (state, rawData) {
       state.user = { isLogin: true, ...rawData.data }
     },
     login (state, rawData) {
-      console.log('登录', rawData)
       const { token } = rawData.data
       state.token = token
       localStorage.setItem('token', token)
