@@ -1,11 +1,6 @@
 <template>
   <div class="container">
     <global-header :user="currentUser" />
-    <message
-      v-if="error.status"
-      type="error"
-      :message="error.message"
-    ></message>
     <loading v-if="isLoading"></loading>
     <router-view></router-view>
     <footer class="text-center py-4 text-secondary bg-light mt-6">
@@ -23,28 +18,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted } from 'vue'
+import { defineComponent, computed, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
 // 报错原因：typescript 只能理解 .ts 文件，无法理解 .vue文件
 import GlobalHeader from './components/GlobalHeader.vue'
 import loading from './components/Loader.vue'
 import { GlobalDataProps } from './store/store'
-import message from '@/components/Message.vue'
+import createMessage from '@/components/createMessage'
 import axios from 'axios'
 export default defineComponent({
   name: 'App',
   components: {
     GlobalHeader,
-    loading,
-    message
+    loading
   },
   setup () {
     const store = useStore<GlobalDataProps>()
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
-    console.log(currentUser)
     const token = computed(() => store.state.token)
     const error = computed(() => store.state.error)
+    // 监听错误
+    watch(() => error.value.status, () => {
+      const { status, message } = error.value
+      if (status && message) {
+        createMessage(message, 'error')
+      }
+    })
+
     onMounted(() => {
       if (!currentUser.value.isLogin && token.value) {
         axios.defaults.headers.common.Authorization = `Bearer ${token.value}`

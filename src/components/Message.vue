@@ -1,4 +1,5 @@
 <template>
+  <!-- 有时候我们想把模板的内容移动到当前组件之外的DOM中，这个时候就可以使用Teleport。 -->
   <teleport to="#message">
     <div
       v-if="isVisible"
