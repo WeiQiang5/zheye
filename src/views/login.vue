@@ -63,7 +63,6 @@ export default defineComponent({
       console.log('result', result)
       // 验证通过
       if (result) {
-        console.log('验证通过')
         const payload = {
           email: emailVal.value,
           password: passwordVal.value

@@ -25,7 +25,10 @@ import useDOMCreate from '@/hooks/useDOMCreate'
 export type MessageType = 'success' | 'error' | 'default'
 export default defineComponent({
   props: {
-    message: String,
+    message: {
+      type: String,
+      default: ''
+    },
     type: {
       type: String as PropType<MessageType>,
       default: 'default'
